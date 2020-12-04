@@ -2,7 +2,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import moviesRouter from './api/movies';
 import bodyParser from 'body-parser';
-
+import './db';
+import {loadUsers} from './seedData'
 dotenv.config();
 
 const app = express();
@@ -25,3 +26,6 @@ app.use(errHandler);
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
 });
+if (process.env.SEED_DB) {
+  loadUsers();
+}
