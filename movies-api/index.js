@@ -1,3 +1,5 @@
+import session from 'express-session';
+import authenticate from './authenticate';
 import dotenv from 'dotenv';
 import express from 'express';
 import moviesRouter from './api/movies';
@@ -19,11 +21,19 @@ const errHandler = (err, req, res, next) => {
   }
   res.status(500).send(`Hey!! You caught the error 👍👍, ${err.stack} `);
 };
+
+//session middleware
+app.use(session({
+  secret: 'ilikecake',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(express.static('public'));
 //configure body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use('/api/movies', moviesRouter);
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/api/movies', authenticate, moviesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/genres', genreRouter);
 app.use(errHandler);
