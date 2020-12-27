@@ -1,5 +1,5 @@
 import session from 'express-session';
-import authenticate from './authenticate';
+import passport from './authenticate';
 import dotenv from 'dotenv';
 import express from 'express';
 import moviesRouter from './api/movies';
@@ -33,7 +33,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/api/movies', authenticate, moviesRouter);
+app.use('/api/movies', passport.authenticate('jwt', {session: false}), moviesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/genres', genreRouter);
 app.use(errHandler);
