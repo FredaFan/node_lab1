@@ -5,7 +5,7 @@ import express from 'express';
 import moviesRouter from './api/movies';
 import bodyParser from 'body-parser';
 import './db';
-import {loadUsers} from './seedData'
+import {loadUsers, loadMovies} from './seedData';
 import usersRouter from './api/users';
 import genreRouter from './api/genres';
 dotenv.config();
@@ -42,4 +42,5 @@ app.listen(port, () => {
 });
 if (process.env.SEED_DB) {
   loadUsers();
+  loadMovies();
 }
