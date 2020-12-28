@@ -23,6 +23,13 @@ UserSchema.methods.comparePassword = function(passw, cb) {
     });
 };
 
+UserSchema.path('password').validate((password) => {
+    let val = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/;
+    return val.test(password);
+    });
+
+
+
 UserSchema.pre('save', function(next) {
   const user = this;
   if (this.isModified('password') || this.isNew) {

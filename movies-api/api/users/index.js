@@ -20,7 +20,7 @@ router.post('/', async (req, res, next) => {
     });
   }
   if (req.query.action === 'register') {
-    await User.create(req.body).catch(next);
+    await User.create(req.body).catch(next);    
     res.status(201).json({
       code: 201,
       msg: 'Successful created new user.',
@@ -61,10 +61,20 @@ router.post('/:userName/favourites', async (req, res, next) => {
   const newFavourite = req.body.id;
   const userName = req.params.userName;
   const movie = await movieModel.findByMovieDBId(newFavourite);
-  const user = await User.findByUserName(userName);
-  await user.favourites.push(movie._id);
+  
+  const user = await User.findByUserName(userName).catch(next);
+  if (!user) return res.status(401).json({ code: 401, msg: 'User not found.' });
+  if (user.favourites.indexOf(movie._id)===-1){
+    await user.favourites.push(movie._id);
   await user.save(); 
   res.status(201).json(user); 
+  }else{
+    return res.status(401).json({ code: 401, msg: 'The favourites movie has existed in.' });
+  }
+  
+  
+
+  
 });
 router.get('/:userName/favourites', (req, res, next) => {
   const userName = req.params.userName;
@@ -72,4 +82,6 @@ router.get('/:userName/favourites', (req, res, next) => {
     user => res.status(201).json(user.favourites)
   ).catch(next);
 });
+
+
 export default router;
