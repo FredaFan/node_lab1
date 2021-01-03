@@ -1,3 +1,4 @@
+import MovieProvider from "./moviesContext";
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Redirect, Switch, Link } from "react-router-dom";
@@ -27,6 +28,7 @@ const App = () => {
             <Link to="/profile">Profile</Link>
           </li>
         </ul>
+        <MovieProvider>
         <Switch>
           <Route path="/public" component={PublicPage} />
           <Route path="/login" component={LoginPage} />
@@ -36,6 +38,7 @@ const App = () => {
           <PrivateRoute path="/profile" component={Profile} />
           <Redirect from="*" to="/" />
         </Switch>
+        </MovieProvider>
       </AuthProvider>
     </BrowserRouter>
   );
